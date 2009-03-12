@@ -28,7 +28,7 @@ except:
     try:
         thislib = __import__(_thislib_name)
     except:
-        raise RuntimeError("Cannot locate pyfse package")
+        raise RuntimeError("Cannot locate %s package" % _thislib_name)
         sys.exit(0)
 
 modules = filter(lambda X: type(thislib.__getattribute__(X)) is ModuleType, thislib.__dict__)
