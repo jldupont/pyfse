@@ -1,13 +1,16 @@
-#summary One-sentence summary of this page.
+#summary The architecture of pyfse is described here.
 
 = Introduction =
 
-Add your content here.
+The architecture consists of:
+ * ActionContainer
+ * Controller
 
+==ActionContainer==
 
-= Details =
+AC are classes that house actions to be performed when a changed of state occurs.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+==Controller==
+
+A Controller implements the _business logic_ of the state engine.
+
