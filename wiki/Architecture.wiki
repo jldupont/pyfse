@@ -8,9 +8,18 @@ The architecture consists of:
 
 ==ActionContainer==
 
-AC are classes that house actions to be performed when a changed of state occurs.
+AC are classes that house actions to be performed when a change of state occurs.
+They are referenced through Controller objects.
 
 ==Controller==
 
 A Controller implements the _business logic_ of the state engine.
 
+=Flow=
+
+{{{
+ (current_state, event) -> (next_state, action)
+}}}
+
+Enter_State
+Leave_State
