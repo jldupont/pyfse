@@ -27,23 +27,29 @@ class Controller(object):
         Transition Table
         ================
         
-        List consisting of:
-            [current_state, event, next_state]
+        Dictionary consisting of:
+            { (current_state, event): next_state] }
             
         Upon leaving the current_state, the method 'leave_STATE'
         will be called. Upon entering the next_state, the method
         'enter_STATE' will be called.
         
-        The format of the parameter 'event': 
-            (unique_string, ...)
+        The format of the parameter 'event': string
+
+        A 'wildcard' match on any event can be obtained using:
+            (current_state, None): next_state
+            
+        An initialization sequence can be obtained using:
+            (None, None): start_state
+
     """
     
     _enter_prefix = "enter_"
     _leave_prefix = "leave_"
     
-    def __init__(self, transition_table, start_state):
+    def __init__(self, transition_table):
         self.transition_table = transition_table
-        self.current_state = start_state
+        self.current_state = ''
     
     def __getattr__(self, name):
         """ Trap for the special methods
@@ -54,11 +60,19 @@ class Controller(object):
             return without raising an exception.
         """
         if name.startswith(self._enter_prefix):
-            return None
+            return self.baseEnter
         if name.startswith(self._leave_prefix):
-            return None
+            return self.baseLeave
         raise AttributeError("pyfse.Controller.__getattr__: name[%s]" % name)
-        
+    
+    def baseEnter(self, event, *pargs):
+        """ Default 'enter' method
+        """
+    
+    def baseLeave(self):
+        """ Default 'leave' method
+        """
+    
     def __call__(self, event, *pargs):
         """ Event Handler entry point
         
@@ -68,6 +82,7 @@ class Controller(object):
             4. current_state <- next_state
             5. Return the result
         """
+
         #1
         leave_method = "%s%s" % (self._leave_prefix, self.current_state)
         getattr(self, leave_method)()
@@ -117,7 +132,8 @@ class Controller(object):
 if __name__ == "__main__":
     """ Tests
     """
-    table = {   ('state_a', 'event_a'): 'state_b',
+    table = {   ('', None):'state_a',
+                ('state_a', 'event_a'): 'state_b',
                 ('state_b', 'event_b'): 'state_c',
                 ('state_c', None): 'state_a'
              }
@@ -125,8 +141,8 @@ if __name__ == "__main__":
     class ExampleController(Controller):
         """
         """
-        def __init__(self, table, start_state):
-            Controller.__init__(self, table, start_state)
+        def __init__(self, table):
+            Controller.__init__(self, table)
             
         def enter_state_a(self, event, *pargs):
             print "Enter StateA"
@@ -141,17 +157,29 @@ if __name__ == "__main__":
             print "Leave StateB"
 
         def enter_state_c(self, event, *pargs):
-            print "Enter StateC"
+            print "Enter StateC %s" % pargs
             
         def leave_state_c(self):
             print "Leave StateC"
 
     def tests(self):
         """
-        >>> c = ExampleController(table, 'state_a')
+        >>> c = ExampleController(table)
+        >>> c('start')
+        Enter StateA
         >>> c('event_a')
-        >>> c('event_b')
+        Leave StateA
+        Enter StateB
+        >>> c('event_b','test')
+        Leave StateB
+        Enter StateC ('test',)
         >>> c('whatever')
+        Leave StateC
+        Enter StateA
+        >>> c('unknown')
+        Traceback (most recent call last):
+        ...
+        pyfseException: error_transition_missing
         """
 
 # ==============================================
