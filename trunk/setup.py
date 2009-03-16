@@ -11,7 +11,6 @@ Features
 ========
 
 * Ease of use: just one import statement
-
 * Speed: once compilation is done, no runtime overhead
 
 Changelog
@@ -20,7 +19,6 @@ Changelog
 **0.0.1** 
 
 Initial alpha release
-
 
 .. _SVN: http://pyfse.googlecode.com/
 """
