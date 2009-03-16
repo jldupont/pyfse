@@ -34,7 +34,7 @@ class Controller(object):
         will be called. Upon entering the next_state, the method
         'enter_STATE' will be called.
         
-        The format of the parameter 'event': string
+        The type of the parameter 'event': string
 
         A 'wildcard' match on any event can be obtained using:
             (current_state, None): next_state
@@ -60,18 +60,10 @@ class Controller(object):
             return without raising an exception.
         """
         if name.startswith(self._enter_prefix):
-            return self.baseEnter
+            return None
         if name.startswith(self._leave_prefix):
-            return self.baseLeave
+            return None
         raise AttributeError("pyfse.Controller.__getattr__: name[%s]" % name)
-    
-    def baseEnter(self, event, *pargs):
-        """ Default 'enter' method
-        """
-    
-    def baseLeave(self):
-        """ Default 'leave' method
-        """
     
     def __call__(self, event, *pargs):
         """ Event Handler entry point
@@ -84,15 +76,21 @@ class Controller(object):
         """
 
         #1
-        leave_method = "%s%s" % (self._leave_prefix, self.current_state)
-        getattr(self, leave_method)()
+        leave_method_name = "%s%s" % (self._leave_prefix, self.current_state)
+        leave_method = getattr(self, leave_method_name)
+        if leave_method is not None:
+            leave_method()
         
         #2
         next_state = self._lookup(event)
         
         #3
-        enter_method = "%s%s" % (self._enter_prefix, next_state)
-        result = getattr(self, enter_method)(event, pargs)
+        enter_method_name = "%s%s" % (self._enter_prefix, next_state)
+        enter_method = getattr(self, enter_method_name)
+        if enter_method is not None:
+            result = enter_method(event, pargs)
+        else:
+            result = None
         
         #4#
         self.current_state = next_state

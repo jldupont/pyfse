@@ -7,12 +7,6 @@ __email__   = "python (at) jldupont.com"
 __desc__    = """
 This project consists in helper classes used to design FSM (Finite State Machines) from pure python classes. 
 
-Features
-========
-
-* Ease of use: just one import statement
-* Speed: once compilation is done, no runtime overhead
-
 Changelog
 ---------
 
@@ -42,7 +36,7 @@ __classifiers = [
 __dependencies = []
 
 setup(
-    name = "pypp",
+    name = "pyfse",
     description      = __doc__,
     author_email     = __email__,
     author           = __author__,
