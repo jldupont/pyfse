@@ -6,10 +6,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-from types import *
-
-
-
+__all__ = ['pyfseException', 'Controller']
 
 class pyfseException(Exception):
     """ pyfse Exception base class 
