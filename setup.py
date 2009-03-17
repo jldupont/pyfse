@@ -1,7 +1,7 @@
 """ pyfse: python finite state engine (machine)
 """
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __email__   = "python (at) jldupont.com"
 
 __desc__    = """
