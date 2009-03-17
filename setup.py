@@ -7,8 +7,13 @@ __email__   = "python (at) jldupont.com"
 __desc__    = """
 This project consists in helper classes used to design FSM (Finite State Machines) from pure python classes. 
 
+Example usage is included in controller.py doctest.
+
 Changelog
 ---------
+**0.0.2**
+
+* Removed unnecessary imports 
 
 **0.0.1** 
 
