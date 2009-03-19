@@ -8,6 +8,8 @@ __version__ = "$Id$"
 
 __all__ = ['pyfseException', 'Controller']
 
+
+
 class pyfseException(Exception):
     """ pyfse Exception base class 
     """
@@ -16,30 +18,56 @@ class pyfseException(Exception):
         self.params = params
         
 
+"""
+Controller class
+================
 
+Transition Table
+----------------
+    
+Dictionary consisting of:
+    { (current_state, event): next_state] }
+    
+Upon leaving the current_state, the method 'leave_STATE'
+will be called. Upon entering the next_state, the method
+'enter_STATE' will be called.
+
+The type of the parameter 'event': string
+
+A 'wildcard' match on any event can be obtained using:
+    (current_state, None): next_state
+    
+An initialization sequence can be obtained using:
+    ('', None): start_state
+    
+An 'attractor' match: an event X can direct the
+    next_state from whatever current_state.
+    (None, 'event'): next_state
+
+Precedence
+==========
+    
+The precedence algorithm goes as follows:
+
+1. Exact match first / Initialization match
+2. Wildcard match
+3. Attractor match
+
+Attractor Match
+===============
+
+Care should be exercised when using this matching pattern.
+"""
 
 class Controller(object):
-    """ Base class
-    
-        Transition Table
-        ================
-        
-        Dictionary consisting of:
-            { (current_state, event): next_state] }
-            
-        Upon leaving the current_state, the method 'leave_STATE'
-        will be called. Upon entering the next_state, the method
-        'enter_STATE' will be called.
-        
-        The type of the parameter 'event': string
-
-        A 'wildcard' match on any event can be obtained using:
-            (current_state, None): next_state
-            
-        An initialization sequence can be obtained using:
-            (None, None): start_state
-
     """
+Controller Class
+================
+
+Just some text.
+"""
+    
+
     
     _enter_prefix = "enter_"
     _leave_prefix = "leave_"
@@ -100,17 +128,23 @@ class Controller(object):
         
             @return: next_state
         """
-        #direct match
+        # precedence 1. direct match
         tuple_dm = (self.current_state, event)        
         dm = self.transition_table.get( tuple_dm, None )
         if dm is not None:
             return dm
         
-        #wildcard match
+        # precedence 2. wildcard match
         tuple_wm = (self.current_state, None)
         wm = self.transition_table.get(tuple_wm, None)
         if wm is not None:
             return wm
+        
+        # precedence 3. attractor match
+        tuple_am = (None, event)
+        am = self.transition_table.get(tuple_wm, None)
+        if am is not None:
+            return am
         
         self._raiseException('error_transition_missing', event)
 
