@@ -12,7 +12,7 @@ import sys
 import tempfile
 import webbrowser
 
-from docutils.core import publish_parts
+from docutils.core import publish_string
 
 # adjust system path to the development environment
 # =================================================
@@ -23,14 +23,9 @@ sys.path.append( trunk )
 def renderReSText(input, justBody = False):
     """ Returns a rendered ReSTructuredText string
     """
-    parts = publish_parts(source=input, writer_name="html4css1",parser_name='restructuredtext')
-    
-    if justBody:
-        rendered_page = parts["fragment"]
-    else:
-        rendered_page = parts["html_title"] + parts["html_subtitle"] + parts["fragment"]
-    
-    return rendered_page
+    parts = publish_string(source=input, writer_name="html")
+       
+    return parts
 
 def writeReSText( text ):
     ""
@@ -52,7 +47,7 @@ for item in TO_RENDER:
     
     rendered = renderReSText( doc )
     
-    fileName = writeReSText(doc )
+    fileName = writeReSText(rendered )
     
     webbrowser.open( fileName , moduleName )
     

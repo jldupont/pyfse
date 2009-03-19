@@ -6,7 +6,7 @@
 __author__  = "Jean-Lou Dupont"
 __version__ = "$Id$"
 
-__all__ = ['pyfseException', 'Controller']
+__all__ = ['pyfseException', 'Controller',]
 
 
 
@@ -16,9 +16,10 @@ class pyfseException(Exception):
     def __init__(self, msg, params = None):
         Exception.__init__(self, msg)
         self.params = params
-        
 
-"""
+
+class Controller(object):
+    """
 Controller class
 ================
 
@@ -57,15 +58,7 @@ Attractor Match
 ===============
 
 Care should be exercised when using this matching pattern.
-"""
-
-class Controller(object):
     """
-Controller Class
-================
-
-Just some text.
-"""
     
 
     
