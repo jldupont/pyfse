@@ -9,3 +9,4 @@ Classes
 
 .. autoclass:: pyfse.controller.Controller
 
+.. autoclass:: pyfse.controller.pyfseException

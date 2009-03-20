@@ -1,16 +1,20 @@
 """ pyfse: python finite state engine (machine)
 """
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 __email__   = "python (at) jldupont.com"
 
 __desc__    = """
 This project consists in helper classes used to design FSM (Finite State Machines) from pure python classes. 
 
-Example usage is included in controller.py doctest.
+Example usage is included in /tests. Additional documentation can be found [http://pyfse.googlecode.com/trunk/pyfse/docs/html here].
 
 Changelog
 ---------
+**0.0.3**
+
+* Added the 'attractor' transition
+
 **0.0.2**
 
 * Removed unnecessary imports 
