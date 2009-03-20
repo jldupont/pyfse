@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-""" pyfse.Controller
-
+"""
+    pyfse.Controller
+    
     @author: Jean-Lou Dupont
 """
 __author__  = "Jean-Lou Dupont"
@@ -19,45 +20,44 @@ class pyfseException(Exception):
 
 
 class Controller(object):
-    """
-Controller class
-================
+    """\
 
-Transition Table
-----------------
+    **Transition Table**
+        
+    Dictionary consisting of:
     
-Dictionary consisting of:
-    { (current_state, event): next_state] }
+        { (current_state, event): next_state] }
+        
+    Upon leaving the current_state, the method 'leave_STATE'
+    will be called. Upon entering the next_state, the method
+    'enter_STATE' will be called.
     
-Upon leaving the current_state, the method 'leave_STATE'
-will be called. Upon entering the next_state, the method
-'enter_STATE' will be called.
-
-The type of the parameter 'event': string
-
-A 'wildcard' match on any event can be obtained using:
-    (current_state, None): next_state
+    The type of the parameter 'event': string
     
-An initialization sequence can be obtained using:
-    ('', None): start_state
+    A 'wildcard' match on any event can be obtained using:
+        
+        **(current_state, None): next_state**
+        
+    An initialization sequence can be obtained using:
+        
+        **('', None): start_state**
+        
+    An 'attractor' match: an event X can direct the
+    next_state from whatever current_state:
     
-An 'attractor' match: an event X can direct the
-    next_state from whatever current_state.
-    (None, 'event'): next_state
-
-Precedence
-==========
+        **(None, 'event'): next_state**
     
-The precedence algorithm goes as follows:
-
-1. Exact match first / Initialization match
-2. Wildcard match
-3. Attractor match
-
-Attractor Match
-===============
-
-Care should be exercised when using this matching pattern.
+    **Precedence**
+        
+    The precedence algorithm goes as follows:
+    
+    1. Exact match first / Initialization match
+    2. Wildcard match
+    3. Attractor match
+    
+    **Attractor Match**
+    
+    Care should be exercised when using this matching pattern.
     """
     
 
