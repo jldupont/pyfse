@@ -135,7 +135,7 @@ class Controller(object):
         
         # precedence 3. attractor match
         tuple_am = (None, event)
-        am = self.transition_table.get(tuple_wm, None)
+        am = self.transition_table.get(tuple_am, None)
         if am is not None:
             return am
         

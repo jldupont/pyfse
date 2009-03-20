@@ -38,9 +38,15 @@ class ExampleController(Controller):
         
     def leave_state_c(self):
         print "Leave StateC"
+        
+    def enter_TRAP(self, event, *pargs):
+        print "enter TRAP"
+        
 
 def tests(self):
     """
+    Normal testing + unknown transition exception testing
+    
     >>> c = ExampleController(table)
     >>> c('start')
     Enter StateA
@@ -63,8 +69,21 @@ def tests(self):
 table2 = {   ('', None):'state_a',
             ('state_a', 'event_a'): 'state_b',
             ('state_b', 'event_b'): 'state_c',
-            ('state_c', None): 'state_a'
+            ('state_c', None): 'state_a',
+            (None, 'event_trap'):'TRAP'
          }
+
+def tests(self):
+    """
+    Attractor Match testing
+    
+    >>> c = ExampleController(table2)
+    >>> c('start')
+    Enter StateA
+    >>> c('event_trap')
+    Leave StateA
+    enter TRAP
+    """
 
 # ==============================================
 # ==============================================
