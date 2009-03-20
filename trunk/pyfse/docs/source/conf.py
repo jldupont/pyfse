@@ -44,9 +44,10 @@ copyright = u'2009, Jean-Lou Dupont'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = '0.0.4'
+import pyfse as pyfse
+version = pyfse.__version__
 # The full version, including alpha/beta/rc tags.
-release = '0.0.4'
+release = version
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:

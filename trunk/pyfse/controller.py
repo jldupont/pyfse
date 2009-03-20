@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-    pyfse.Controller
+    pyfse.Controller module
     
     @author: Jean-Lou Dupont
 """
@@ -12,7 +12,7 @@ __all__ = ['pyfseException', 'Controller',]
 
 
 class pyfseException(Exception):
-    """ pyfse Exception base class 
+    """ Exception base class 
     """
     def __init__(self, msg, params = None):
         Exception.__init__(self, msg)
@@ -20,7 +20,7 @@ class pyfseException(Exception):
 
 
 class Controller(object):
-    """\
+    """
 
     **Transition Table**
         
@@ -147,66 +147,4 @@ class Controller(object):
         """
         params = {'current_state':self.current_state, 'event':event}
         raise pyfseException(msg, params)
-
-# ==============================================
-# ==============================================
-
-if __name__ == "__main__":
-    """ Tests
-    """
-    table = {   ('', None):'state_a',
-                ('state_a', 'event_a'): 'state_b',
-                ('state_b', 'event_b'): 'state_c',
-                ('state_c', None): 'state_a'
-             }
-    
-    class ExampleController(Controller):
-        """
-        """
-        def __init__(self, table):
-            Controller.__init__(self, table)
-            
-        def enter_state_a(self, event, *pargs):
-            print "Enter StateA"
-            
-        def leave_state_a(self):
-            print "Leave StateA"
-    
-        def enter_state_b(self, event, *pargs):
-            print "Enter StateB"
-            
-        def leave_state_b(self):
-            print "Leave StateB"
-
-        def enter_state_c(self, event, *pargs):
-            print "Enter StateC %s" % pargs
-            
-        def leave_state_c(self):
-            print "Leave StateC"
-
-    def tests(self):
-        """
-        >>> c = ExampleController(table)
-        >>> c('start')
-        Enter StateA
-        >>> c('event_a')
-        Leave StateA
-        Enter StateB
-        >>> c('event_b','test')
-        Leave StateB
-        Enter StateC ('test',)
-        >>> c('whatever')
-        Leave StateC
-        Enter StateA
-        >>> c('unknown')
-        Traceback (most recent call last):
-        ...
-        pyfseException: error_transition_missing
-        """
-
-# ==============================================
-# ==============================================
-
-    import doctest
-    doctest.testmod()
 
