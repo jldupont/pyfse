@@ -7,7 +7,7 @@ __email__   = "python (at) jldupont.com"
 __desc__    = """
 This project consists in helper classes used to design FSM (Finite State Machines) from pure python classes. 
 
-Example usage is included in /tests. Additional documentation can be found [http://pyfse.googlecode.com/svn/trunk/pyfse/docs/html/index.html here].
+Example usage is included in /tests. Additional documentation can be found in doc_.
 
 Changelog
 ---------
@@ -24,6 +24,7 @@ Changelog
 Initial alpha release
 
 .. _SVN: http://pyfse.googlecode.com/
+.. _doc: http://pyfse.googlecode.com/svn/trunk/pyfse/docs/html/index.html
 """
 
 __doc_url__ = """http://pyfse.googlecode.com/"""
