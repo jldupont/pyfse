@@ -18,8 +18,9 @@ table = {   ('', None):             ('state_a', None),
 class ExampleController(Controller):
     """
     """
-    def __init__(self, table):
+    def __init__(self, table, actions = None):
         Controller.__init__(self, table)
+        self.actions = actions
         
     def enter_state_a(self, event, *pargs):
         print "Enter StateA"
@@ -46,7 +47,7 @@ class ExampleController(Controller):
         print "action_START"
         
 
-def tests(self):
+def tests():
     """
     Normal testing + unknown transition exception testing
     
@@ -79,7 +80,7 @@ table2 = {   ('', None):            ('state_a', 'action_START'),
             (None, 'event_trap'):   ('TRAP',    Trap)
          }
 
-def tests2(self):
+def tests2():
     """
     Attractor Match testing
     
@@ -92,6 +93,24 @@ def tests2(self):
     enter TRAP
     Trap event[event_trap]
     """
+
+class Actions(object):
+    def A(self, event):
+        print "action_A: event[%s]" % event
+
+table3 = {   ('', None):            ('state_a', 'actions.A'),
+         }
+
+
+def test3():
+    """
+    >>> a = Actions()
+    >>> c = ExampleController(table3, a)
+    >>> c('start')
+    Enter StateA
+    action_A: event[start]
+    """
+
 
 # ==============================================
 # ==============================================

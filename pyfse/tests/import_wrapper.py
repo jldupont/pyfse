@@ -24,4 +24,4 @@ def _findTrunk( path=os.path.dirname( os.path.abspath( __file__ ) ) ):
 
 
 trunk = _findTrunk()
-sys.path.append( trunk )
+sys.path.append( trunk+'/pyfse' )

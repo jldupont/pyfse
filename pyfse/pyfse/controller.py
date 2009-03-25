@@ -75,9 +75,19 @@ class Controller(object):
     
     **Action Method**
     
-    The `action method` need not to be present. It can also take
-    the value `None`. The `action method` must be a callable function
-    or a method name local to the controller.
+    The `action method` need not to be present: it can take
+    the value `None`. The `action method` can be:
+    1. a callable function
+    2. a method name local to the controller.
+    3. a string representing a local attribute + method name
+    
+    For case 1, the function will be called with the `event` parameter.
+    For case 2, the method will be called with the `event` parameter.
+    
+    For case 3, the string must take the form "attribute.method_name" where
+    the `attribute` must be local to the controller (i.e. accessible through
+    the `self` reference) and the `method_name` must be a textual name for
+    the method of the object accessible through the local `attribute`. 
     
     The `enter_STATE` will be called prior to the `action method`.
     """
@@ -138,14 +148,16 @@ class Controller(object):
         self.current_state = next_state
         
     def _handleActionMethod(self, action, event):
-        """ Handles the `action method`        
+        """ Handles the `action method`
+        
+            1. String consisting of only a `method name`
+            2. Callable function
+            3. String representing `attribute.method_name`
         """
         # String? if YES, then try local method
         if type(action) is StringType:
-            action_method = getattr(self, action, None)
-            if action_method is not None:
-                action_method(event)
-                return
+            self._handleStringAction(action, event)
+            return
         
         # Callable? This is the last resort.
         if callable(action):
@@ -153,6 +165,20 @@ class Controller(object):
             return
         
         self._raiseException('error_action_method', event)
+
+    def _handleStringAction(self, action, event):
+        """ Handles the `action` when it is provided through a string
+        """
+        try:    
+            attr, method_name = action.split('.')
+            obj = getattr(self, attr)
+        except: 
+            obj, method_name = self, action
+        
+        action_method = getattr(obj, method_name, None)
+        if action_method is not None:
+            action_method(event)
+            
 
     def _lookup(self, event):
         """ Look up the next_state based on [current_state;event]

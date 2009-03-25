@@ -16,8 +16,18 @@ import sys, os
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
-trunk = os.path.abspath( os.path.dirname(__file__)+'../../../..' )
-sys.path.append( trunk )
+def _findTrunk( path=os.path.dirname( os.path.abspath( __file__ ) ) ):
+    
+    trunk = path+'/trunk'
+    if os.path.exists( trunk ):
+        return trunk
+    
+    oneUp = os.path.dirname( path )
+    return _findTrunk( oneUp )
+
+
+trunk = _findTrunk()
+sys.path.append( trunk+'/pyfse' )
 print trunk
 
 # General configuration
