@@ -9,10 +9,10 @@ __version__ = "$Id$"
 import import_wrapper
 from pyfse import *
     
-table = {   ('', None):'state_a',
-            ('state_a', 'event_a'): 'state_b',
-            ('state_b', 'event_b'): 'state_c',
-            ('state_c', None): 'state_a'
+table = {   ('', None):             ('state_a', None),
+            ('state_a', 'event_a'): ('state_b', None),
+            ('state_b', 'event_b'): ('state_c', None),
+            ('state_c', None):      ('state_a', None)
          }
 
 class ExampleController(Controller):
@@ -42,6 +42,9 @@ class ExampleController(Controller):
     def enter_TRAP(self, event, *pargs):
         print "enter TRAP"
         
+    def action_START(self, event, *pargs):
+        print "action_START"
+        
 
 def tests(self):
     """
@@ -62,27 +65,32 @@ def tests(self):
     >>> c('unknown')
     Traceback (most recent call last):
     ...
-    pyfseException: error_transition_missing
+    pyfseException: msg[error_transition_missing] params[{'current_state': 'state_a', 'event': 'unknown'}]
     """
 
+def Trap(event):
+    print "Trap event[%s]" % event
 
-table2 = {   ('', None):'state_a',
-            ('state_a', 'event_a'): 'state_b',
-            ('state_b', 'event_b'): 'state_c',
-            ('state_c', None): 'state_a',
-            (None, 'event_trap'):'TRAP'
+
+table2 = {   ('', None):            ('state_a', 'action_START'),
+            ('state_a', 'event_a'): ('state_b', None),
+            ('state_b', 'event_b'): ('state_c', None),
+            ('state_c', None):      ('state_a', None),
+            (None, 'event_trap'):   ('TRAP',    Trap)
          }
 
-def tests(self):
+def tests2(self):
     """
     Attractor Match testing
     
     >>> c = ExampleController(table2)
     >>> c('start')
     Enter StateA
+    action_START
     >>> c('event_trap')
     Leave StateA
     enter TRAP
+    Trap event[event_trap]
     """
 
 # ==============================================

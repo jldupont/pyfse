@@ -9,6 +9,8 @@ __version__ = "$Id$"
 
 __all__ = ['pyfseException', 'Controller',]
 
+from types import *
+
 
 
 class pyfseException(Exception):
@@ -17,6 +19,18 @@ class pyfseException(Exception):
     def __init__(self, msg, params = None):
         Exception.__init__(self, msg)
         self.params = params
+        
+    def __str__(self):
+        """
+        Human readable representation
+        
+        Usually, a client of this library would use the
+        `msg` parameter to lookup a human readable message.
+        The parameters `params` would be used to clarify the
+        error message.
+        """
+        return "msg[%s] params[%s]" % (self.message, self.params)
+
 
 
 class Controller(object):
@@ -26,17 +40,17 @@ class Controller(object):
         
     Dictionary consisting of:
     
-        { (current_state, event): next_state] }
+        { (current_state, event): (next_state, action_method) }
         
     Upon leaving the current_state, the method 'leave_STATE'
     will be called. Upon entering the next_state, the method
     'enter_STATE' will be called.
     
-    The type of the parameter 'event': string
+    The type of the parameter 'event' is a `string`.
     
     A 'wildcard' match on any event can be obtained using:
         
-        **(current_state, None): next_state**
+        **(current_state, None): (next_state, action_method)**
         
     An initialization sequence can be obtained using:
         
@@ -45,7 +59,7 @@ class Controller(object):
     An 'attractor' match: an event X can direct the
     next_state from whatever current_state:
     
-        **(None, 'event'): next_state**
+        **(None, 'event'): (next_state, action_method)**
     
     **Precedence**
         
@@ -58,6 +72,14 @@ class Controller(object):
     **Attractor Match**
     
     Care should be exercised when using this matching pattern.
+    
+    **Action Method**
+    
+    The `action method` need not to be present. It can also take
+    the value `None`. The `action method` must be a callable function
+    or a method name local to the controller.
+    
+    The `enter_STATE` will be called prior to the `action method`.
     """
     
 
@@ -87,10 +109,10 @@ class Controller(object):
         """ Event Handler entry point
         
             1. Call the leave_X method where X is the current_state
-            2. Look-up next_state based on [current_state;input]            
+            2. Look-up [next_state;action] based on [current_state;input]            
             3. Call the enter_Y method where Y is the next_state
-            4. current_state <- next_state
-            5. Return the result
+            4. Call action method
+            5. current_state <- next_state
         """
 
         #1
@@ -100,21 +122,37 @@ class Controller(object):
             leave_method()
         
         #2
-        next_state = self._lookup(event)
+        next_state, action = self._lookup(event)
         
         #3
         enter_method_name = "%s%s" % (self._enter_prefix, next_state)
         enter_method = getattr(self, enter_method_name)
         if enter_method is not None:
-            result = enter_method(event, pargs)
-        else:
-            result = None
-        
-        #4#
-        self.current_state = next_state
+            enter_method(event, pargs)
+
+        #4
+        if action is not None:
+            self._handleActionMethod(action, event)
         
         #5
-        return result
+        self.current_state = next_state
+        
+    def _handleActionMethod(self, action, event):
+        """ Handles the `action method`        
+        """
+        # String? if YES, then try local method
+        if type(action) is StringType:
+            action_method = getattr(self, action, None)
+            if action_method is not None:
+                action_method(event)
+                return
+        
+        # Callable? This is the last resort.
+        if callable(action):
+            action(event)
+            return
+        
+        self._raiseException('error_action_method', event)
 
     def _lookup(self, event):
         """ Look up the next_state based on [current_state;event]

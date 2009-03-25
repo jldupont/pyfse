@@ -1,7 +1,7 @@
 """ pyfse: python finite state engine (machine)
 """
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 __email__   = "python (at) jldupont.com"
 
 __desc__    = """
@@ -11,6 +11,12 @@ Example usage is included in /tests. Additional documentation can be found in do
 
 Changelog
 ---------
+
+**0.0.4**
+
+* Backward compatibility breakage
+  * Added `action_method` support to `transition table`
+
 **0.0.3**
 
 * Added the 'attractor' transition
