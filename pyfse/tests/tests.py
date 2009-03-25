@@ -21,6 +21,7 @@ class ExampleController(Controller):
     def __init__(self, table, actions = None):
         Controller.__init__(self, table)
         self.actions = actions
+        self._debug = True
         
     def enter_state_a(self, event, *pargs):
         print "Enter StateA"
@@ -53,6 +54,7 @@ def tests():
     
     >>> c = ExampleController(table)
     >>> c('start')
+    default_leave
     Enter StateA
     >>> c('event_a')
     Leave StateA
@@ -86,6 +88,7 @@ def tests2():
     
     >>> c = ExampleController(table2)
     >>> c('start')
+    default_leave
     Enter StateA
     action_START
     >>> c('event_trap')
@@ -98,7 +101,8 @@ class Actions(object):
     def A(self, event):
         print "action_A: event[%s]" % event
 
-table3 = {   ('', None):            ('state_a', 'actions.A'),
+table3 = {  ('', None):         ('state_a', 'actions.A'),
+            ('state_a', None):  ('state_z', None),
          }
 
 
@@ -107,8 +111,12 @@ def test3():
     >>> a = Actions()
     >>> c = ExampleController(table3, a)
     >>> c('start')
+    default_leave
     Enter StateA
     action_A: event[start]
+    >>> c('whatever')
+    Leave StateA
+    default_enter
     """
 
 
