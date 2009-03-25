@@ -100,20 +100,21 @@ class Controller(object):
     def __init__(self, transition_table):
         self.transition_table = transition_table
         self.current_state = ''
+        self._debug = False
     
-    def __getattr__(self, name):
-        """ Trap for the special methods
-            e.g. enter_X  leave_X
-            
-            If we get here, that surely means the called method 
-            is not found; if it is one of enter_ or leave_ then 
-            return without raising an exception.
+    def default_enter(self, event, *pargs):
+        """ Default `enter` method
+            Should be subclassed
         """
-        if name.startswith(self._enter_prefix):
-            return None
-        if name.startswith(self._leave_prefix):
-            return None
-        raise AttributeError("pyfse.Controller.__getattr__: name[%s]" % name)
+        if self._debug:
+            print "default_enter"
+    
+    def default_leave(self):
+        """ Default `leave` method
+            Should be subclassed
+        """
+        if self._debug:
+            print "default_leave"
     
     def __call__(self, event, *pargs):
         """ Event Handler entry point
@@ -127,18 +128,16 @@ class Controller(object):
 
         #1
         leave_method_name = "%s%s" % (self._leave_prefix, self.current_state)
-        leave_method = getattr(self, leave_method_name)
-        if leave_method is not None:
-            leave_method()
+        leave_method = getattr(self, leave_method_name, self.default_leave)
+        leave_method()
         
         #2
         next_state, action = self._lookup(event)
         
         #3
         enter_method_name = "%s%s" % (self._enter_prefix, next_state)
-        enter_method = getattr(self, enter_method_name)
-        if enter_method is not None:
-            enter_method(event, pargs)
+        enter_method = getattr(self, enter_method_name, self.default_enter)
+        enter_method(event, pargs)
 
         #4
         if action is not None:

@@ -12,6 +12,11 @@ Example usage is included in /tests. Additional documentation can be found in do
 Changelog
 ---------
 
+**0.0.6**
+
+Added 
+
+
 **0.0.5**
 
 Added support for more `action_method`
