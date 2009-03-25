@@ -1,3 +1,3 @@
-from os import system
+import os
 
-system('sphinx-build docs/source docs/html')
+os.system('sphinx-build docs/source docs/html')
