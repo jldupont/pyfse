@@ -106,7 +106,7 @@ class Actions(object):
         
 
 table3 = {  ('', None):         ('state_a', 'A'),
-            ('state_a', None):  ('state_x', None),
+            ('state_a', None):  'state_x',
             ('state_x', None):  ('state_y', 'Y'),
          }
 
