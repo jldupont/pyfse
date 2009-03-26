@@ -111,7 +111,7 @@ class Controller(object):
         self.actions = actions
         self._debug = False
     
-    def default_enter(self, event, *pargs):
+    def default_enter(self, event, *pargs, **kargs):
         """ Default `enter` method
             Should be subclassed
         """
@@ -125,7 +125,7 @@ class Controller(object):
         if self._debug:
             print "default_leave"
     
-    def __call__(self, event, *pargs):
+    def __call__(self, event, *pargs, **kargs):
         """ Event Handler entry point
         
             1. Call the leave_X method where X is the current_state
@@ -148,11 +148,11 @@ class Controller(object):
         #3
         enter_method_name = "%s%s" % (self._enter_prefix, next_state)
         enter_method = getattr(self, enter_method_name, self.default_enter)
-        enter_method(event, pargs)
+        enter_method(event, *pargs, **kargs)
 
         #4
         if action is not None:
-            self._handleActionMethod(action, event)
+            self._handleActionMethod(action, event, *pargs, **kargs)
         
         #5
         self.current_state = next_state
@@ -179,7 +179,7 @@ class Controller(object):
             
         return next_state, action
      
-    def _handleActionMethod(self, action, event):
+    def _handleActionMethod(self, action, event, *pargs, **kargs):
         """ Handles the `action method`
         
             1. String consisting of only a `method name`
@@ -188,34 +188,36 @@ class Controller(object):
         """
         # String? if YES, then try local method
         if type(action) is StringType:
-            self._handleStringAction(action, event)
+            self._handleStringAction(action, event, *pargs, **kargs)
             return
         
         # Callable? This is the last resort.
         if callable(action):
-            action(event)
+            action(event, *pargs, **kargs)
             return
         
         self._raiseException('error_action_method', event)
 
-    def _handleStringAction(self, action, event):
+    def _handleStringAction(self, action, event, *pargs, **kargs):
         """ Handles the `action` when it is provided through a string
         """
+        # accessible through `actions` ?
         if self.actions is not None:
-            self._handleActionFromActions(action, event)
+            self._handleActionFromActions(action, event, *pargs, **kargs)
             return
         
+        # local to controller?
         action_method = getattr(self, action, None)
         if action_method is not None:
-            action_method(event)
+            action_method(event, *pargs, **kargs)
             
-    def _handleActionFromActions(self, action, event):
+    def _handleActionFromActions(self, action, event, *pargs, **kargs):
         try:
             method = getattr(self.actions, action)
-            method(event)            
         except:
             self._raiseException('error_action_method_not_found', event)
-            
+
+        method(event, *pargs, **kargs)            
 
     def _lookup(self, event):
         """ Look up the next_state based on [current_state;event]
