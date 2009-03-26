@@ -1,7 +1,7 @@
 """ pyfse: python finite state engine (machine)
 """
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 __email__   = "python (at) jldupont.com"
 
 __desc__    = """
@@ -14,8 +14,7 @@ Changelog
 
 **0.0.6**
 
-Added 
-
+Modified `action_method` to increase separation of concern 
 
 **0.0.5**
 
