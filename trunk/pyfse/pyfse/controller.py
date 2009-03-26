@@ -40,7 +40,14 @@ class Controller(object):
         
     Dictionary consisting of:
     
-        { (current_state, event): (next_state, action_method) }
+        { (current_state, event): record }
+        
+    where `record` can be of the form:
+    
+    1. (next_state, action_method)
+    2. (next_state,)
+    3. (next_state, None)
+    4. next_state
         
     Upon leaving the current_state, the method 'leave_STATE'
     will be called. Upon entering the next_state, the method
@@ -54,12 +61,12 @@ class Controller(object):
         
     An initialization sequence can be obtained using:
         
-        **('', None): start_state**
+        **('', None): record**
         
     An 'attractor' match: an event X can direct the
     next_state from whatever current_state:
     
-        **(None, 'event'): (next_state, action_method)**
+        **(None, 'event'): record**
     
     **Precedence**
         
@@ -134,7 +141,9 @@ class Controller(object):
         leave_method()
         
         #2
-        next_state, action = self._lookup(event)
+        #next_state, action = self._lookup(event)
+        record = self._lookup(event)
+        next_state, action = self._decodeRecord(record)
         
         #3
         enter_method_name = "%s%s" % (self._enter_prefix, next_state)
@@ -147,7 +156,29 @@ class Controller(object):
         
         #5
         self.current_state = next_state
+    
+    def _decodeRecord(self, record):
+        """ Extracts `next_state` and `action`
         
+            **Cases**
+            
+            1. ('next_state', action)
+            2. ('next_state', None)
+            3. ('next_state', )
+            4. 'next_state'
+        """
+        if type(record) is TupleType:
+            try:    next_state = record[0]
+            except: next_state = record
+            
+            try:    action = record[1]
+            except: action = None
+        else:
+            next_state = record
+            action = None
+            
+        return next_state, action
+     
     def _handleActionMethod(self, action, event):
         """ Handles the `action method`
         

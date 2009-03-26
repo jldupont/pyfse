@@ -55,7 +55,14 @@
 <dd><p><strong>Transition Table</strong></p>
 <p>Dictionary consisting of:</p>
 <blockquote>
-{ (current_state, event): (next_state, action_method) }</blockquote>
+{ (current_state, event): record }</blockquote>
+<p>where <cite>record</cite> can be of the form:</p>
+<ol class="arabic simple">
+<li>(next_state, action_method)</li>
+<li>(next_state,)</li>
+<li>(next_state, None)</li>
+<li>next_state</li>
+</ol>
 <p>Upon leaving the current_state, the method &#8216;leave_STATE&#8217;
 will be called. Upon entering the next_state, the method
 &#8216;enter_STATE&#8217; will be called.</p>
@@ -65,11 +72,11 @@ will be called. Upon entering the next_state, the method
 <strong>(current_state, None): (next_state, action_method)</strong></blockquote>
 <p>An initialization sequence can be obtained using:</p>
 <blockquote>
-<strong>(&#8216;&#8217;, None): start_state</strong></blockquote>
+<strong>(&#8216;&#8217;, None): record</strong></blockquote>
 <p>An &#8216;attractor&#8217; match: an event X can direct the
 next_state from whatever current_state:</p>
 <blockquote>
-<strong>(None, &#8216;event&#8217;): (next_state, action_method)</strong></blockquote>
+<strong>(None, &#8216;event&#8217;): record</strong></blockquote>
 <p><strong>Precedence</strong></p>
 <p>The precedence algorithm goes as follows:</p>
 <ol class="arabic simple">
