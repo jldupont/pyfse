@@ -1,7 +1,7 @@
 """ pyfse: python finite state engine (machine)
 """
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.0.6"
+__version__ = "0.1.0"
 __email__   = "python (at) jldupont.com"
 
 __desc__    = """
@@ -11,6 +11,10 @@ Example usage is included in /tests. Additional documentation can be found in do
 
 Changelog
 ---------
+
+**0.1.0**
+
+* Added support for positional & keyword arguments
 
 **0.0.6**
 
@@ -50,7 +54,7 @@ import os.path
 from setuptools import setup, find_packages
 
 __classifiers = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'Intended Audience :: Developers',
     'License :: Public Domain',
     'Programming Language :: Python',
