@@ -77,6 +77,7 @@ class Controller(object):
     
     The `action method` need not to be present: it can take
     the value `None`. The `action method` can be:
+    
     1. a callable function
     2. a method name of the `actions` object instance (if provided)
     3. a method name local to the controller.

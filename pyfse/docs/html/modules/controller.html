@@ -2,13 +2,13 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Module pyfse.controller &mdash; pyfse v0.0.5 documentation</title>
+    <title>Module pyfse.controller &mdash; pyfse v0.0.6 documentation</title>
     <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
           URL_ROOT:    '../',
-          VERSION:     '0.0.5',
+          VERSION:     '0.0.6',
           COLLAPSE_MODINDEX: false,
           FILE_SUFFIX: '.html'
       };
@@ -18,7 +18,7 @@
     <link rel="contents" title="Global table of contents" href="../contents.html" />
     <link rel="index" title="Global index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="pyfse v0.0.5 documentation" href="../index.html" />
+    <link rel="top" title="pyfse v0.0.6 documentation" href="../index.html" />
     <link rel="prev" title="Welcome to pyfse&#8217;s documentation!" href="../index.html" />
   </head>
   <body>
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../index.html" title="Welcome to pyfse&#8217;s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyfse v0.0.5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">pyfse v0.0.6 documentation</a> &raquo;</li>
       </ul>
     </div>
     <div class="document">
@@ -51,7 +51,7 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyfse.controller.Controller">
-<!--[pyfse.controller.Controller]-->class <tt class="descclassname">pyfse.controller.</tt><tt class="descname">Controller</tt><big>(</big><em>transition_table</em><big>)</big><a class="headerlink" href="#pyfse.controller.Controller" title="Permalink to this definition">¶</a></dt>
+<!--[pyfse.controller.Controller]-->class <tt class="descclassname">pyfse.controller.</tt><tt class="descname">Controller</tt><big>(</big><em>transition_table</em>, <em>actions=None</em><big>)</big><a class="headerlink" href="#pyfse.controller.Controller" title="Permalink to this definition">¶</a></dt>
 <dd><p><strong>Transition Table</strong></p>
 <p>Dictionary consisting of:</p>
 <blockquote>
@@ -81,16 +81,18 @@ next_state from whatever current_state:</p>
 <p>Care should be exercised when using this matching pattern.</p>
 <p><strong>Action Method</strong></p>
 <p>The <cite>action method</cite> need not to be present: it can take
-the value <cite>None</cite>. The <cite>action method</cite> can be:
-1. a callable function
-2. a method name local to the controller.
-3. a string representing a local attribute + method name</p>
+the value <cite>None</cite>. The <cite>action method</cite> can be:</p>
+<ol class="arabic simple">
+<li>a callable function</li>
+<li>a method name of the <cite>actions</cite> object instance (if provided)</li>
+<li>a method name local to the controller.</li>
+</ol>
+<p>string representing a local attribute + method name</p>
 <p>For case 1, the function will be called with the <cite>event</cite> parameter.
-For case 2, the method will be called with the <cite>event</cite> parameter.</p>
-<p>For case 3, the string must take the form &#8220;attribute.method_name&#8221; where
-the <cite>attribute</cite> must be local to the controller (i.e. accessible through
-the <cite>self</cite> reference) and the <cite>method_name</cite> must be a textual name for
-the method of the object accessible through the local <cite>attribute</cite>.</p>
+For case 2, the method will be called with the <cite>event</cite> parameter.
+For case 3, assuming the <cite>actions</cite> object is provided, the
+method will be called with the <cite>event</cite> parameter.</p>
+<p>Precedence order is as listed.</p>
 <p>The <cite>enter_STATE</cite> will be called prior to the <cite>action method</cite>.</p>
 </dd></dl>
 
@@ -144,12 +146,12 @@ the method of the object accessible through the local <cite>attribute</cite>.</p
         <li class="right" >
           <a href="../index.html" title="Welcome to pyfse&#8217;s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">pyfse v0.0.5 documentation</a> &raquo;</li>
+        <li><a href="../index.html">pyfse v0.0.6 documentation</a> &raquo;</li>
       </ul>
     </div>
     <div class="footer">
       &copy; Copyright 2009, Jean-Lou Dupont.
-      Last updated on Mar 25, 2009.
+      Last updated on Mar 26, 2009.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
     </div>
   </body>
