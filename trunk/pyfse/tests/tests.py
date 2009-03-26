@@ -19,8 +19,7 @@ class ExampleController(Controller):
     """
     """
     def __init__(self, table, actions = None):
-        Controller.__init__(self, table)
-        self.actions = actions
+        Controller.__init__(self, table, actions)
         self._debug = True
         
     def enter_state_a(self, event, *pargs):
@@ -98,11 +97,17 @@ def tests2():
     """
 
 class Actions(object):
+    
     def A(self, event):
         print "action_A: event[%s]" % event
+        
+    def X(self, event):
+        print "action_X: event[%s]" % event
+        
 
-table3 = {  ('', None):         ('state_a', 'actions.A'),
-            ('state_a', None):  ('state_z', None),
+table3 = {  ('', None):         ('state_a', 'A'),
+            ('state_a', None):  ('state_x', None),
+            ('state_x', None):  ('state_y', 'Y'),
          }
 
 
@@ -117,6 +122,10 @@ def test3():
     >>> c('whatever')
     Leave StateA
     default_enter
+    >>> c('whatever')
+    Traceback (most recent call last):
+    ...
+    pyfseException: msg[error_action_method_not_found] params[{'current_state': 'state_x', 'event': 'whatever'}]
     """
 
 

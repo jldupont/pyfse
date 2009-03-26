@@ -78,28 +78,29 @@ class Controller(object):
     The `action method` need not to be present: it can take
     the value `None`. The `action method` can be:
     1. a callable function
-    2. a method name local to the controller.
-    3. a string representing a local attribute + method name
+    2. a method name of the `actions` object instance (if provided)
+    3. a method name local to the controller.
+ 
+    string representing a local attribute + method name
     
     For case 1, the function will be called with the `event` parameter.
     For case 2, the method will be called with the `event` parameter.
+    For case 3, assuming the `actions` object is provided, the
+    method will be called with the `event` parameter.
     
-    For case 3, the string must take the form "attribute.method_name" where
-    the `attribute` must be local to the controller (i.e. accessible through
-    the `self` reference) and the `method_name` must be a textual name for
-    the method of the object accessible through the local `attribute`. 
+    Precedence order is as listed. 
     
     The `enter_STATE` will be called prior to the `action method`.
     """
     
-
     
     _enter_prefix = "enter_"
     _leave_prefix = "leave_"
     
-    def __init__(self, transition_table):
+    def __init__(self, transition_table, actions = None):
         self.transition_table = transition_table
         self.current_state = ''
+        self.actions = actions
         self._debug = False
     
     def default_enter(self, event, *pargs):
@@ -168,15 +169,20 @@ class Controller(object):
     def _handleStringAction(self, action, event):
         """ Handles the `action` when it is provided through a string
         """
-        try:    
-            attr, method_name = action.split('.')
-            obj = getattr(self, attr)
-        except: 
-            obj, method_name = self, action
+        if self.actions is not None:
+            self._handleActionFromActions(action, event)
+            return
         
-        action_method = getattr(obj, method_name, None)
+        action_method = getattr(self, action, None)
         if action_method is not None:
             action_method(event)
+            
+    def _handleActionFromActions(self, action, event):
+        try:
+            method = getattr(self.actions, action)
+            method(event)            
+        except:
+            self._raiseException('error_action_method_not_found', event)
             
 
     def _lookup(self, event):
