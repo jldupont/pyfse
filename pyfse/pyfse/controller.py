@@ -141,7 +141,6 @@ class Controller(object):
         leave_method()
         
         #2
-        #next_state, action = self._lookup(event)
         record = self._lookup(event)
         next_state, action = self._decodeRecord(record)
         
