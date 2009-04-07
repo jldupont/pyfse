@@ -14,12 +14,17 @@ from types import *
 
 
 class pyfseException(Exception):
-    """ Exception base class 
+    """ 
+    Exception base class 
     """
     def __init__(self, msg, params = None):
         Exception.__init__(self, msg)
+        self.msg_id = msg  #helper for MsgLogger
         self.params = params
-        
+
+    def __repr__(self):
+        return self.__str__()
+
     def __str__(self):
         """
         Human readable representation
@@ -211,9 +216,10 @@ class Controller(object):
             action_method(event, *pargs, **kargs)
             
     def _handleActionFromActions(self, action, event, *pargs, **kargs):
-        try:
-            method = getattr(self.actions, action)
-        except:
+        
+        method = getattr(self.actions, action, None)
+        
+        if method is None:
             self._raiseException('error_action_method_not_found', event)
 
         method(event, *pargs, **kargs)            
@@ -246,7 +252,15 @@ class Controller(object):
     def _raiseException(self, msg, event = None):
         """ Raises an exception.
             Convenience method.
+            
+            If a logger is present, the ``msg`` is passed
+            along with the ``parameters``.
         """
         params = {'current_state':self.current_state, 'event':event}
+        
+        #if a logger is present
+        if getattr(self, 'logger', False):
+            self.logger.error(msg, **params)
+            
         raise pyfseException(msg, params)
 

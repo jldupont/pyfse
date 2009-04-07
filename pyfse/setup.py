@@ -1,7 +1,7 @@
 """ pyfse: python finite state engine (machine)
 """
 __author__  = "Jean-Lou Dupont"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __email__   = "python (at) jldupont.com"
 
 __desc__    = """
@@ -11,6 +11,10 @@ Example usage is included in /tests. Additional documentation can be found in do
 
 Changelog
 ---------
+
+**0.1.1**
+
+* Added integration with ``MsgLogger`` from pyjld.logger package
 
 **0.1.0**
 
